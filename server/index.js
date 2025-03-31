@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
+const savingRoutes = require("./routes/savingRoutes");
 const session = require("express-session");
 const MongoDbStore = require("connect-mongodb-session")(session);
 
@@ -21,5 +22,6 @@ app.use(cors({
 
 
 app.use("/", userRoutes);
+app.use('/', savingRoutes)
 
 app.listen(port, () => console.log(`Server running on port ${port}`));

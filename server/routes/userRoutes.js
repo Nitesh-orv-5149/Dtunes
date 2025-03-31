@@ -7,7 +7,7 @@ router.post("/signup", async (req, res) => {
   const { username, email, password } = req.body;
   const hashedPassword = await hashPassword(password);
   const user = await User.create({ username, email, password: hashedPassword });
-  res.status(201).json(user);
+  res.status(201).json({ success : true, user });
 });
 
 router.post("/signin", async (req, res) => {
@@ -46,6 +46,27 @@ router.post("/signout", async (req, res) => {
     res.status(500).json({ message: "Error signing out", error: error.message });
   }
 });
+
+router.get("/profile/:id", async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.params.id });
+    
+    if (!user) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    
+    const userData = {
+      username: user.username,
+      email: user.email,
+    };
+    
+    res.status(200).json({ user: userData });
+  } catch (error) {
+    console.error("Profile fetch error:", error);
+    res.status(500).json({ message: "Error fetching profile", error: error.message });
+  }
+});
+
 
 
 
